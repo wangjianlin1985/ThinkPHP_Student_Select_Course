@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+<title>专业添加</title>
+<link href="__PUBLIC__/plugins/bootstrap.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/bootstrap-dashen.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/font-awesome.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/animate.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+<body style="margin-top:70px;">
+{include file="common/header" /}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 wow fadeInUp" data-wow-duration="0.5s">
+			<div>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+			    	<li role="presentation" ><a href="{:url('SpecialInfo/frontlist')}">专业列表</a></li>
+			    	<li role="presentation" class="active"><a href="#specialInfoAdd" aria-controls="specialInfoAdd" role="tab" data-toggle="tab">添加专业</a></li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane" id="specialInfoList">
+				    </div>
+				    <div role="tabpanel" class="tab-pane active" id="specialInfoAdd"> 
+				      	<form class="form-horizontal" name="specialInfoAddForm" id="specialInfoAddForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+						  <div class="form-group">
+							 <label for="specialInfo_specialFieldNumber" class="col-md-2 text-right">专业编号:</label>
+							 <div class="col-md-8"> 
+							 	<input type="text" id="specialInfo_specialFieldNumber" name="specialInfo_specialFieldNumber" class="form-control" placeholder="请输入专业编号">
+							 </div>
+						  </div> 
+						  <div class="form-group">
+						  	 <label for="specialInfo_specialFieldName" class="col-md-2 text-right">专业名称:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="specialInfo_specialFieldName" name="specialInfo_specialFieldName" class="form-control" placeholder="请输入专业名称">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="specialInfo_specialCollegeNumber_collegeNumber" class="col-md-2 text-right">所在学院:</label>
+						  	 <div class="col-md-8">
+							    <select id="specialInfo_specialCollegeNumber_collegeNumber" name="specialInfo.specialCollegeNumber.collegeNumber" class="form-control">
+							    </select>
+						  	 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="specialInfo_specialBirthDateDiv" class="col-md-2 text-right">成立日期:</label>
+						  	 <div class="col-md-8">
+				                <div id="specialInfo_specialBirthDateDiv" class="input-group date specialInfo_specialBirthDate col-md-12" data-link-field="specialInfo_specialBirthDate" data-link-format="yyyy-mm-dd">
+				                    <input class="form-control" id="specialInfo_specialBirthDate" name="specialInfo_specialBirthDate" size="16" type="text" value="" placeholder="请选择成立日期" readonly>
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				                </div>
+						  	 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="specialInfo_specialMan" class="col-md-2 text-right">联系人:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="specialInfo_specialMan" name="specialInfo_specialMan" class="form-control" placeholder="请输入联系人">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="specialInfo_specialTelephone" class="col-md-2 text-right">联系电话:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="specialInfo_specialTelephone" name="specialInfo_specialTelephone" class="form-control" placeholder="请输入联系电话">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="specialInfo_specialMemo" class="col-md-2 text-right">附加信息:</label>
+						  	 <div class="col-md-8">
+							    <textarea id="specialInfo_specialMemo" name="specialInfo_specialMemo" rows="8" class="form-control" placeholder="请输入附加信息"></textarea>
+							 </div>
+						  </div>
+				          <div class="form-group">
+				             <span class="col-md-2"></span>
+				             <span onclick="ajaxSpecialInfoAdd();" class="btn btn-primary bottom5 top5">添加</span>
+				          </div>
+						</form> 
+				        <style>#specialInfoAddForm .form-group {margin:10px;}  </style>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+{include file="common/footer" /}
+<script src="__PUBLIC__/plugins/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap.js"></script>
+<script src="__PUBLIC__/plugins/wow.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugins/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="__PUBLIC__/plugins/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script>
+	//提交添加专业信息
+	function ajaxSpecialInfoAdd() { 
+		//提交之前先验证表单
+		$("#specialInfoAddForm").data('bootstrapValidator').validate();
+		if(!$("#specialInfoAddForm").data('bootstrapValidator').isValid()){
+			return;
+		}
+		jQuery.ajax({
+			type : "post",
+			url : "{:url('SpecialInfo/frontAdd')}",
+			dataType : "json" , 
+			data: new FormData($("#specialInfoAddForm")[0]),
+			success : function(obj) {
+				if(obj.success){ 
+					alert("保存成功！");
+					$("#specialInfoAddForm").find("input").val("");
+					$("#specialInfoAddForm").find("textarea").val("");
+				} else {
+					alert(obj.message);
+				}
+			},
+			processData: false, 
+			contentType: false, 
+		});
+	} 
+$(function(){
+	/*小屏幕导航点击关闭菜单*/
+    $('.navbar-collapse a').click(function(){
+        $('.navbar-collapse').collapse('hide');
+    });
+    new WOW().init();
+	//验证专业添加表单字段
+	$('#specialInfoAddForm').bootstrapValidator({
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			"specialInfo_specialFieldNumber": {
+				validators: {
+					notEmpty: {
+						message: "专业编号不能为空",
+					}
+				}
+			},
+			"specialInfo_specialFieldName": {
+				validators: {
+					notEmpty: {
+						message: "专业名称不能为空",
+					}
+				}
+			},
+			"specialInfo_specialBirthDate": {
+				validators: {
+					notEmpty: {
+						message: "成立日期不能为空",
+					}
+				}
+			},
+		}
+	}); 
+	//初始化所在学院下拉框值 
+	$.ajax({
+		url: "{:url('College/listAll')}",
+		type: "get",
+		dataType: "json",
+		success: function(colleges,response,status) { 
+			$("#specialInfo_specialCollegeNumber_collegeNumber").empty();
+			var html="";
+    		$(colleges).each(function(i,college){
+    			html += "<option value='" + college.collegeNumber + "'>" + college.collegeName + "</option>";
+    		});
+    		$("#specialInfo_specialCollegeNumber_collegeNumber").html(html);
+    	}
+	});
+	//成立日期组件
+	$('#specialInfo_specialBirthDateDiv').datetimepicker({
+		language:  'zh-CN',  //显示语言
+		format: 'yyyy-mm-dd',
+		minView: 2,
+		weekStart: 1,
+		todayBtn:  1,
+		autoclose: 1,
+		minuteStep: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0
+	}).on('hide',function(e) {
+		//下面这行代码解决日期组件改变日期后不验证的问题
+		$('#specialInfoAddForm').data('bootstrapValidator').updateStatus('specialInfo_specialBirthDate', 'NOT_VALIDATED',null).validateField('specialInfo_specialBirthDate');
+	});
+})
+</script>
+</body>
+</html>

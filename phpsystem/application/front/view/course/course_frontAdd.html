@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+<title>课程添加</title>
+<link href="__PUBLIC__/plugins/bootstrap.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/bootstrap-dashen.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/font-awesome.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/animate.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+<body style="margin-top:70px;">
+{include file="common/header" /}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 wow fadeInUp" data-wow-duration="0.5s">
+			<div>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+			    	<li role="presentation" ><a href="{:url('Course/frontlist')}">课程列表</a></li>
+			    	<li role="presentation" class="active"><a href="#courseAdd" aria-controls="courseAdd" role="tab" data-toggle="tab">添加课程</a></li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane" id="courseList">
+				    </div>
+				    <div role="tabpanel" class="tab-pane active" id="courseAdd"> 
+				      	<form class="form-horizontal" name="courseAddForm" id="courseAddForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+						  <div class="form-group">
+							 <label for="course_courseNumber" class="col-md-2 text-right">课程编号:</label>
+							 <div class="col-md-8"> 
+							 	<input type="text" id="course_courseNumber" name="course_courseNumber" class="form-control" placeholder="请输入课程编号">
+							 </div>
+						  </div> 
+						  <div class="form-group">
+						  	 <label for="course_courseName" class="col-md-2 text-right">课程名称:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="course_courseName" name="course_courseName" class="form-control" placeholder="请输入课程名称">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="course_courseTeacher_teacherNumber" class="col-md-2 text-right">开课老师:</label>
+						  	 <div class="col-md-8">
+							    <select id="course_courseTeacher_teacherNumber" name="course.courseTeacher.teacherNumber" class="form-control">
+							    </select>
+						  	 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="course_courseTime" class="col-md-2 text-right">上课时间:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="course_courseTime" name="course_courseTime" class="form-control" placeholder="请输入上课时间">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="course_coursePlace" class="col-md-2 text-right">上课地点:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="course_coursePlace" name="course_coursePlace" class="form-control" placeholder="请输入上课地点">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="course_courseScore" class="col-md-2 text-right">课程学分:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="course_courseScore" name="course_courseScore" class="form-control" placeholder="请输入课程学分">
+							 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="course_courseMemo" class="col-md-2 text-right">附加信息:</label>
+						  	 <div class="col-md-8">
+							    <input type="text" id="course_courseMemo" name="course_courseMemo" class="form-control" placeholder="请输入附加信息">
+							 </div>
+						  </div>
+				          <div class="form-group">
+				             <span class="col-md-2"></span>
+				             <span onclick="ajaxCourseAdd();" class="btn btn-primary bottom5 top5">添加</span>
+				          </div>
+						</form> 
+				        <style>#courseAddForm .form-group {margin:10px;}  </style>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+{include file="common/footer" /}
+<script src="__PUBLIC__/plugins/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap.js"></script>
+<script src="__PUBLIC__/plugins/wow.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugins/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="__PUBLIC__/plugins/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script>
+	//提交添加课程信息
+	function ajaxCourseAdd() { 
+		//提交之前先验证表单
+		$("#courseAddForm").data('bootstrapValidator').validate();
+		if(!$("#courseAddForm").data('bootstrapValidator').isValid()){
+			return;
+		}
+		jQuery.ajax({
+			type : "post",
+			url : "{:url('Course/frontAdd')}",
+			dataType : "json" , 
+			data: new FormData($("#courseAddForm")[0]),
+			success : function(obj) {
+				if(obj.success){ 
+					alert("保存成功！");
+					$("#courseAddForm").find("input").val("");
+					$("#courseAddForm").find("textarea").val("");
+				} else {
+					alert(obj.message);
+				}
+			},
+			processData: false, 
+			contentType: false, 
+		});
+	} 
+$(function(){
+	/*小屏幕导航点击关闭菜单*/
+    $('.navbar-collapse a').click(function(){
+        $('.navbar-collapse').collapse('hide');
+    });
+    new WOW().init();
+	//验证课程添加表单字段
+	$('#courseAddForm').bootstrapValidator({
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			"course_courseNumber": {
+				validators: {
+					notEmpty: {
+						message: "课程编号不能为空",
+					}
+				}
+			},
+			"course_courseName": {
+				validators: {
+					notEmpty: {
+						message: "课程名称不能为空",
+					}
+				}
+			},
+			"course_courseScore": {
+				validators: {
+					notEmpty: {
+						message: "课程学分不能为空",
+					},
+					numeric: {
+						message: "课程学分不正确"
+					}
+				}
+			},
+		}
+	}); 
+	//初始化开课老师下拉框值 
+	$.ajax({
+		url: "{:url('Teacher/listAll')}",
+		type: "get",
+		dataType: "json",
+		success: function(teachers,response,status) { 
+			$("#course_courseTeacher_teacherNumber").empty();
+			var html="";
+    		$(teachers).each(function(i,teacher){
+    			html += "<option value='" + teacher.teacherNumber + "'>" + teacher.teacherName + "</option>";
+    		});
+    		$("#course_courseTeacher_teacherNumber").html(html);
+    	}
+	});
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/backcss/specialInfo.css" />
+<div id="specialInfo_editDiv">
+	<form id="specialInfoEditForm" enctype="multipart/form-data"  method="post">
+		<div>
+			<span class="label">专业编号:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="specialInfo_specialFieldNumber_edit" name="specialInfo_specialFieldNumber" value="{$specialFieldNumber}" style="width:200px" />
+			</span>
+		</div>
+
+		<div>
+			<span class="label">专业名称:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="specialInfo_specialFieldName_edit" name="specialInfo_specialFieldName" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">所在学院:</span>
+			<span class="inputControl">
+				<input class="textbox"  id="specialInfo_specialCollegeNumber_collegeNumber_edit" name="specialInfo_specialCollegeNumber_collegeNumber" style="width: auto"/>
+			</span>
+		</div>
+		<div>
+			<span class="label">成立日期:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="specialInfo_specialBirthDate_edit" name="specialInfo_specialBirthDate" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">联系人:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="specialInfo_specialMan_edit" name="specialInfo_specialMan" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">联系电话:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="specialInfo_specialTelephone_edit" name="specialInfo_specialTelephone" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">附加信息:</span>
+			<span class="inputControl">
+				<textarea id="specialInfo_specialMemo_edit" name="specialInfo_specialMemo" rows="8" cols="60"></textarea>
+
+			</span>
+
+		</div>
+		<div class="operation">
+			<a id="specialInfoModifyButton" class="easyui-linkbutton">更新</a> 
+		</div>
+	</form>
+</div>
+<script>
+	var publicURL = "__PUBLIC__/";
+	var backURL = "__PUBLIC__/index.php/back/";
+</script>
+<script src="__PUBLIC__/backjs/specialInfo/specialInfo_modify.js"></script>
+

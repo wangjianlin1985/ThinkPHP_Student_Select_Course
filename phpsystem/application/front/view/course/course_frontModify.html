@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+  <TITLE>修改课程信息</TITLE>
+  <link href="__PUBLIC__/plugins/bootstrap.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/bootstrap-dashen.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/font-awesome.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/animate.css" rel="stylesheet"> 
+</head>
+<body style="margin-top:70px;"> 
+<div class="container">
+{include file="common/header" /}
+	<div class="col-md-9 wow fadeInLeft">
+	<ul class="breadcrumb">
+  		<li><a href="__PUBLIC__/index.php">首页</a></li>
+  		<li class="active">课程信息修改</li>
+	</ul>
+		<div class="row"> 
+      	<form class="form-horizontal" name="courseEditForm" id="courseEditForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+		  <div class="form-group">
+			 <label for="course_courseNumber_edit" class="col-md-3 text-right">课程编号:</label>
+			 <div class="col-md-9"> 
+			 	<input type="text" id="course_courseNumber_edit" name="course_courseNumber" class="form-control" placeholder="请输入课程编号" readOnly>
+			 </div>
+		  </div> 
+		  <div class="form-group">
+		  	 <label for="course_courseName_edit" class="col-md-3 text-right">课程名称:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="course_courseName_edit" name="course_courseName" class="form-control" placeholder="请输入课程名称">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="course_courseTeacher_teacherNumber_edit" class="col-md-3 text-right">开课老师:</label>
+		  	 <div class="col-md-9">
+			    <select id="course_courseTeacher_teacherNumber_edit" name="course_courseTeacher_teacherNumber" class="form-control">
+			    </select>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="course_courseTime_edit" class="col-md-3 text-right">上课时间:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="course_courseTime_edit" name="course_courseTime" class="form-control" placeholder="请输入上课时间">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="course_coursePlace_edit" class="col-md-3 text-right">上课地点:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="course_coursePlace_edit" name="course_coursePlace" class="form-control" placeholder="请输入上课地点">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="course_courseScore_edit" class="col-md-3 text-right">课程学分:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="course_courseScore_edit" name="course_courseScore" class="form-control" placeholder="请输入课程学分">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="course_courseMemo_edit" class="col-md-3 text-right">附加信息:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="course_courseMemo_edit" name="course_courseMemo" class="form-control" placeholder="请输入附加信息">
+			 </div>
+		  </div>
+			  <div class="form-group">
+			  	<span class="col-md-3"></span>
+			  	<span onclick="ajaxCourseModify();" class="btn btn-primary bottom5 top5">修改</span>
+			  </div>
+		</form> 
+	    <style>#courseEditForm .form-group {margin-bottom:5px;}  </style>
+      </div>
+   </div>
+</div>
+
+
+{include file="common/footer" /}
+<script src="__PUBLIC__/plugins/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap.js"></script>
+<script src="__PUBLIC__/plugins/wow.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap-datetimepicker.min.js"></script>
+<script src="__PUBLIC__/plugins/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jsdate.js"></script>
+<script>
+/*弹出修改课程界面并初始化数据*/
+function courseEdit(courseNumber) {
+	$.ajax({
+		url :  "{:url('Course/update')}?courseNumber=" + courseNumber,
+		type : "get",
+		dataType: "json",
+		success : function (course, response, status) {
+			if (course) {
+				$("#course_courseNumber_edit").val(course.courseNumber);
+				$("#course_courseName_edit").val(course.courseName);
+				$.ajax({
+					url: "{:url('Teacher/listAll')}",
+					type: "get",
+					dataType: "json",
+					success: function(teachers,response,status) { 
+						$("#course_courseTeacher_teacherNumber_edit").empty();
+						var html="";
+		        		$(teachers).each(function(i,teacher){
+		        			html += "<option value='" + teacher.teacherNumber + "'>" + teacher.teacherName + "</option>";
+		        		});
+		        		$("#course_courseTeacher_teacherNumber_edit").html(html);
+		        		$("#course_courseTeacher_teacherNumber_edit").val(course.courseTeacher);
+					}
+				});
+				$("#course_courseTime_edit").val(course.courseTime);
+				$("#course_coursePlace_edit").val(course.coursePlace);
+				$("#course_courseScore_edit").val(course.courseScore);
+				$("#course_courseMemo_edit").val(course.courseMemo);
+			} else {
+				alert("获取信息失败！");
+			}
+		}
+	});
+}
+
+/*ajax方式提交课程信息表单给服务器端修改*/
+function ajaxCourseModify() {
+	$.ajax({
+		url :  "{:url('Course/update')}",
+		type : "post",
+		dataType: "json",
+		data: new FormData($("#courseEditForm")[0]),
+		success : function (obj, response, status) {
+            if(obj.success){
+                alert("信息修改成功！");
+                location.reload(true);
+                $("#courseQueryForm").submit();
+            }else{
+                alert(obj.message);
+            } 
+		},
+		processData: false,
+		contentType: false,
+	});
+}
+
+$(function(){
+        /*小屏幕导航点击关闭菜单*/
+        $('.navbar-collapse a').click(function(){
+            $('.navbar-collapse').collapse('hide');
+        });
+        new WOW().init();
+    courseEdit("{$courseNumber}");
+ })
+ </script> 
+</body>
+</html>
+

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+  <TITLE>修改专业信息</TITLE>
+  <link href="__PUBLIC__/plugins/bootstrap.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/bootstrap-dashen.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/font-awesome.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/animate.css" rel="stylesheet"> 
+</head>
+<body style="margin-top:70px;"> 
+<div class="container">
+{include file="common/header" /}
+	<div class="col-md-9 wow fadeInLeft">
+	<ul class="breadcrumb">
+  		<li><a href="__PUBLIC__/index.php">首页</a></li>
+  		<li class="active">专业信息修改</li>
+	</ul>
+		<div class="row"> 
+      	<form class="form-horizontal" name="specialInfoEditForm" id="specialInfoEditForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+		  <div class="form-group">
+			 <label for="specialInfo_specialFieldNumber_edit" class="col-md-3 text-right">专业编号:</label>
+			 <div class="col-md-9"> 
+			 	<input type="text" id="specialInfo_specialFieldNumber_edit" name="specialInfo_specialFieldNumber" class="form-control" placeholder="请输入专业编号" readOnly>
+			 </div>
+		  </div> 
+		  <div class="form-group">
+		  	 <label for="specialInfo_specialFieldName_edit" class="col-md-3 text-right">专业名称:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="specialInfo_specialFieldName_edit" name="specialInfo_specialFieldName" class="form-control" placeholder="请输入专业名称">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="specialInfo_specialCollegeNumber_collegeNumber_edit" class="col-md-3 text-right">所在学院:</label>
+		  	 <div class="col-md-9">
+			    <select id="specialInfo_specialCollegeNumber_collegeNumber_edit" name="specialInfo_specialCollegeNumber_collegeNumber" class="form-control">
+			    </select>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="specialInfo_specialBirthDate_edit" class="col-md-3 text-right">成立日期:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date specialInfo_specialBirthDate_edit col-md-12" data-link-field="specialInfo_specialBirthDate_edit" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" id="specialInfo_specialBirthDate_edit" name="specialInfo_specialBirthDate" size="16" type="text" value="" placeholder="请选择成立日期" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="specialInfo_specialMan_edit" class="col-md-3 text-right">联系人:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="specialInfo_specialMan_edit" name="specialInfo_specialMan" class="form-control" placeholder="请输入联系人">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="specialInfo_specialTelephone_edit" class="col-md-3 text-right">联系电话:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="specialInfo_specialTelephone_edit" name="specialInfo_specialTelephone" class="form-control" placeholder="请输入联系电话">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="specialInfo_specialMemo_edit" class="col-md-3 text-right">附加信息:</label>
+		  	 <div class="col-md-9">
+			    <textarea id="specialInfo_specialMemo_edit" name="specialInfo_specialMemo" rows="8" class="form-control" placeholder="请输入附加信息"></textarea>
+			 </div>
+		  </div>
+			  <div class="form-group">
+			  	<span class="col-md-3"></span>
+			  	<span onclick="ajaxSpecialInfoModify();" class="btn btn-primary bottom5 top5">修改</span>
+			  </div>
+		</form> 
+	    <style>#specialInfoEditForm .form-group {margin-bottom:5px;}  </style>
+      </div>
+   </div>
+</div>
+
+
+{include file="common/footer" /}
+<script src="__PUBLIC__/plugins/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap.js"></script>
+<script src="__PUBLIC__/plugins/wow.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap-datetimepicker.min.js"></script>
+<script src="__PUBLIC__/plugins/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jsdate.js"></script>
+<script>
+/*弹出修改专业界面并初始化数据*/
+function specialInfoEdit(specialFieldNumber) {
+	$.ajax({
+		url :  "{:url('SpecialInfo/update')}?specialFieldNumber=" + specialFieldNumber,
+		type : "get",
+		dataType: "json",
+		success : function (specialInfo, response, status) {
+			if (specialInfo) {
+				$("#specialInfo_specialFieldNumber_edit").val(specialInfo.specialFieldNumber);
+				$("#specialInfo_specialFieldName_edit").val(specialInfo.specialFieldName);
+				$.ajax({
+					url: "{:url('College/listAll')}",
+					type: "get",
+					dataType: "json",
+					success: function(colleges,response,status) { 
+						$("#specialInfo_specialCollegeNumber_collegeNumber_edit").empty();
+						var html="";
+		        		$(colleges).each(function(i,college){
+		        			html += "<option value='" + college.collegeNumber + "'>" + college.collegeName + "</option>";
+		        		});
+		        		$("#specialInfo_specialCollegeNumber_collegeNumber_edit").html(html);
+		        		$("#specialInfo_specialCollegeNumber_collegeNumber_edit").val(specialInfo.specialCollegeNumber);
+					}
+				});
+				$("#specialInfo_specialBirthDate_edit").val(specialInfo.specialBirthDate);
+				$("#specialInfo_specialMan_edit").val(specialInfo.specialMan);
+				$("#specialInfo_specialTelephone_edit").val(specialInfo.specialTelephone);
+				$("#specialInfo_specialMemo_edit").val(specialInfo.specialMemo);
+			} else {
+				alert("获取信息失败！");
+			}
+		}
+	});
+}
+
+/*ajax方式提交专业信息表单给服务器端修改*/
+function ajaxSpecialInfoModify() {
+	$.ajax({
+		url :  "{:url('SpecialInfo/update')}",
+		type : "post",
+		dataType: "json",
+		data: new FormData($("#specialInfoEditForm")[0]),
+		success : function (obj, response, status) {
+            if(obj.success){
+                alert("信息修改成功！");
+                location.reload(true);
+                $("#specialInfoQueryForm").submit();
+            }else{
+                alert(obj.message);
+            } 
+		},
+		processData: false,
+		contentType: false,
+	});
+}
+
+$(function(){
+        /*小屏幕导航点击关闭菜单*/
+        $('.navbar-collapse a').click(function(){
+            $('.navbar-collapse').collapse('hide');
+        });
+        new WOW().init();
+    /*成立日期组件*/
+    $('.specialInfo_specialBirthDate_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd',
+    	minView: 2,
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+    specialInfoEdit("{$specialFieldNumber}");
+ })
+ </script> 
+</body>
+</html>
+

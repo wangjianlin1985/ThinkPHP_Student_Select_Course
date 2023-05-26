@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+<title>新闻查询</title>
+<link href="__PUBLIC__/plugins/bootstrap.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/bootstrap-dashen.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/font-awesome.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/animate.css" rel="stylesheet">
+<link href="__PUBLIC__/plugins/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+<body style="margin-top:70px;">
+<div class="container">
+{include file="common/header" /}
+	<div class="col-md-9 wow fadeInLeft">
+		<ul class="breadcrumb">
+  			<li><a href="__PUBLIC__/index.php">首页</a></li>
+  			<li><a href="{:url('News/frontlist')}">新闻信息列表</a></li>
+  			<li class="active">查询结果显示</li>
+  			<a class="pull-right" href="{:url('News/frontAdd')}" style="display:none;">添加新闻</a>
+		</ul>
+		<div class="row">
+			<?php
+				/*计算起始序号*/
+				$startIndex = ($currentPage-1) * $rows;
+				$currentIndex = $startIndex+1;
+				/*遍历记录*/
+			?>
+			{volist name="newsRs" id="news" key="i"}
+			<?php
+				$clearLeft = "";
+				if(($i-1)%4 == 0) $clearLeft = "style=\"clear:left;\"";
+			?>
+			<div class="col-md-3 bottom15" {$clearLeft}>
+			  <a  href="{:url('News/frontshow',array('newsId'=>$news['newsId']))}"><img class="img-responsive" src="__PUBLIC__/{$news.newsPhoto}" /></a>
+			     <div class="showFields">
+			     	<div class="field">
+	            		记录编号:{$news.newsId}
+			     	</div>
+			     	<div class="field">
+	            		新闻标题:{$news.newsTitle}
+			     	</div>
+			     	<div class="field">
+	            		新闻内容:{$news.newsContent}
+			     	</div>
+			     	<div class="field">
+	            		发布日期:{$news.newsDate}
+			     	</div>
+			        <a class="btn btn-primary top5" href="{:url('News/frontshow',array('newsId'=>$news['newsId']))}">详情</a>
+			        <a class="btn btn-primary top5" onclick="newsEdit('{$news.newsId}');" style="display:none;">修改</a>
+			        <a class="btn btn-primary top5" onclick="newsDelete('{$news.newsId}');" style="display:none;">删除</a>
+			     </div>
+			</div>
+			{/volist}
+
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="pull-left">
+						<ul class="pagination">
+							<li><a href="#" onclick="GoToPage({$currentPage-1},{$totalPage});" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+							<?php
+								$startPage = $currentPage - 5;
+								$endPage = $currentPage + 5;
+								if($startPage < 1) $startPage=1;
+								if($endPage > $totalPage) $endPage = $totalPage;
+								for($i=$startPage;$i<=$endPage;$i++) {
+							?>
+							<li class="<?php echo $currentPage==$i?"active":""; ?>"><a href="#"  onclick="GoToPage({$i},{$totalPage});">{$i}</a></li>
+							<?php } ?>
+							<li><a href="#" onclick="GoToPage({$currentPage+1},{$totalPage});"><span aria-hidden="true">&raquo;</span></a></li>
+						</ul>
+					</nav>
+					<div class="pull-right" style="line-height:75px;" >共有{$recordNumber}条记录，当前第 {$currentPage}/{$totalPage}  页</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-3 wow fadeInRight">
+		<div class="page-header">
+    		<h1>新闻查询</h1>
+		</div>
+		<form name="newsQueryForm" id="newsQueryForm" action="{:url('News/frontlist')}" class="mar_t15" method="post">
+			<div class="form-group">
+				<label for="newsTitle">新闻标题:</label>
+				<input type="text" id="newsTitle" name="newsTitle" value="{$newsTitle}" class="form-control" placeholder="请输入新闻标题">
+			</div>
+			<div class="form-group">
+				<label for="newsDate">发布日期:</label>
+				<input type="text" id="newsDate" name="newsDate" class="form-control"  placeholder="请选择发布日期" value="{$newsDate}" onclick="SelectDate(this,'yyyy-MM-dd')" />
+			</div>
+            <input type=hidden name=currentPage id="currentPage" value="{$currentPage}" />
+            <button type="submit" class="btn btn-primary" onclick="$('#currentPage').val(1);return true;">查询</button>
+        </form>
+	</div>
+
+		</div>
+</div>
+<div id="newsEditDialog" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="fa fa-edit"></i>&nbsp;新闻信息编辑</h4>
+      </div>
+      <div class="modal-body" style="height:450px; overflow: scroll;">
+      	<form class="form-horizontal" name="newsEditForm" id="newsEditForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+		  <div class="form-group">
+			 <label for="news_newsId_edit" class="col-md-3 text-right">记录编号:</label>
+			 <div class="col-md-9"> 
+			 	<input type="text" id="news_newsId_edit" name="news.newsId" class="form-control" placeholder="请输入记录编号" readOnly>
+			 </div>
+		  </div> 
+		  <div class="form-group">
+		  	 <label for="news_newsTitle_edit" class="col-md-3 text-right">新闻标题:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="news_newsTitle_edit" name="news_newsTitle" class="form-control" placeholder="请输入新闻标题">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="news_newsPhoto_edit" class="col-md-3 text-right">新闻图片:</label>
+		  	 <div class="col-md-9">
+			    <img  class="img-responsive" id="news_newsPhotoImg" border="0px"/><br/>
+			    <input type="hidden" id="news_newsPhoto_edit" name="news_newsPhoto"/>
+			    <input id="newsPhotoFile" name="newsPhotoFile" type="file" size="50" />
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="news_newsContent_edit" class="col-md-3 text-right">新闻内容:</label>
+		  	 <div class="col-md-9">
+			    <textarea id="news_newsContent_edit" name="news_newsContent" rows="8" class="form-control" placeholder="请输入新闻内容"></textarea>
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="news_newsDate_edit" class="col-md-3 text-right">发布日期:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date news_newsDate_edit col-md-12" data-link-field="news_newsDate_edit" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" id="news_newsDate_edit" name="news_newsDate" size="16" type="text" value="" placeholder="请选择发布日期" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+		</form> 
+	    <style>#newsEditForm .form-group {margin-bottom:5px;}  </style>
+      </div>
+      <div class="modal-footer"> 
+      	<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      	<button type="button" class="btn btn-primary" onclick="ajaxNewsModify();">提交</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{include file="common/footer" /}
+<script src="__PUBLIC__/plugins/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap.js"></script>
+<script src="__PUBLIC__/plugins/wow.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap-datetimepicker.min.js"></script>
+<script src="__PUBLIC__/plugins/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jsdate.js"></script>
+<script>
+/*跳转到查询结果的某页*/
+function GoToPage(currentPage,totalPage) {
+    if(currentPage==0) return;
+    if(currentPage>totalPage) return;
+    document.newsQueryForm.currentPage.value = currentPage;
+    document.newsQueryForm.submit();
+}
+
+/*可以直接跳转到某页*/
+function changepage(totalPage)
+{
+    var pageValue=document.newsQueryForm.pageValue.value;
+    if(pageValue>totalPage) {
+        alert('你输入的页码超出了总页数!');
+        return ;
+    }
+    document.newsQueryForm.currentPage.value = pageValue;
+    documentnewsQueryForm.submit();
+}
+
+/*弹出修改新闻界面并初始化数据*/
+function newsEdit(newsId) {
+	$.ajax({
+		url :  "{:url('News/update')}?newsId=" + newsId ,
+		type : "get",
+		dataType: "json",
+		success : function (news, response, status) {
+			if (news) {
+				$("#news_newsId_edit").val(news.newsId);
+				$("#news_newsTitle_edit").val(news.newsTitle);
+				$("#news_newsPhoto_edit").val(news.newsPhoto);
+				$("#news_newsPhotoImg").attr("src", "__PUBLIC__/" + news.newsPhoto);
+				$("#news_newsContent_edit").val(news.newsContent);
+				$("#news_newsDate_edit").val(news.newsDate);
+				$('#newsEditDialog').modal('show');
+			} else {
+				alert("获取信息失败！");
+			}
+		}
+	});
+}
+
+/*删除新闻信息*/
+function newsDelete(newsId) {
+	if(confirm("确认删除这个记录")) {
+		$.ajax({
+			type : "POST",
+			url: "{:url('News/deletes')}",
+			data : {
+				newsIds : newsId,
+			},
+			dataType: "json",
+			success : function (obj) {
+				if (obj.success) {
+					alert("删除成功");
+					$("#newsQueryForm").submit();
+					//location.href= "{:url('News/frontlist')}";
+				}
+				else 
+					alert(obj.message);
+			},
+		});
+	}
+}
+
+/*ajax方式提交新闻信息表单给服务器端修改*/
+function ajaxNewsModify() {
+	$.ajax({
+		url :  "{:url('News/update')}",
+		type : "post",
+		dataType: "json",
+		data: new FormData($("#newsEditForm")[0]),
+		success : function (obj, response, status) {
+            if(obj.success){
+                alert("信息修改成功！");
+                $("#newsQueryForm").submit();
+            }else{
+                alert(obj.message);
+            } 
+		},
+		processData: false,
+		contentType: false,
+	});
+}
+
+$(function(){
+	/*小屏幕导航点击关闭菜单*/
+    $('.navbar-collapse a').click(function(){
+        $('.navbar-collapse').collapse('hide');
+    });
+    new WOW().init();
+
+    /*发布日期组件*/
+    $('.news_newsDate_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd',
+    	minView: 2,
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+})
+</script>
+</body>
+</html>
+

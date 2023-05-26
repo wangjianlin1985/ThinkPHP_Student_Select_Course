@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+  <TITLE>修改教师信息</TITLE>
+  <link href="__PUBLIC__/plugins/bootstrap.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/bootstrap-dashen.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/font-awesome.css" rel="stylesheet">
+  <link href="__PUBLIC__/plugins/animate.css" rel="stylesheet"> 
+</head>
+<body style="margin-top:70px;"> 
+<div class="container">
+{include file="common/header" /}
+	<div class="col-md-9 wow fadeInLeft">
+	<ul class="breadcrumb">
+  		<li><a href="__PUBLIC__/index.php">首页</a></li>
+  		<li class="active">教师信息修改</li>
+	</ul>
+		<div class="row"> 
+      	<form class="form-horizontal" name="teacherEditForm" id="teacherEditForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+		  <div class="form-group">
+			 <label for="teacher_teacherNumber_edit" class="col-md-3 text-right">教师工号:</label>
+			 <div class="col-md-9"> 
+			 	<input type="text" id="teacher_teacherNumber_edit" name="teacher_teacherNumber" class="form-control" placeholder="请输入教师工号" readOnly>
+			 </div>
+		  </div> 
+		  <div class="form-group">
+		  	 <label for="teacher_collegeObj_collegeNumber_edit" class="col-md-3 text-right">所在学院:</label>
+		  	 <div class="col-md-9">
+			    <select id="teacher_collegeObj_collegeNumber_edit" name="teacher_collegeObj_collegeNumber" class="form-control">
+			    </select>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherName_edit" class="col-md-3 text-right">教师姓名:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_teacherName_edit" name="teacher_teacherName" class="form-control" placeholder="请输入教师姓名">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherPassword_edit" class="col-md-3 text-right">登录密码:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_teacherPassword_edit" name="teacher_teacherPassword" class="form-control" placeholder="请输入登录密码">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherSex_edit" class="col-md-3 text-right">性别:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_teacherSex_edit" name="teacher_teacherSex" class="form-control" placeholder="请输入性别">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherPhoto_edit" class="col-md-3 text-right">教师照片:</label>
+		  	 <div class="col-md-9">
+			    <img  class="img-responsive" id="teacher_teacherPhotoImg" border="0px"/><br/>
+			    <input type="hidden" id="teacher_teacherPhoto_edit" name="teacher_teacherPhoto"/>
+			    <input id="teacherPhotoFile" name="teacherPhotoFile" type="file" size="50" />
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherBirthday_edit" class="col-md-3 text-right">出生日期:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date teacher_teacherBirthday_edit col-md-12" data-link-field="teacher_teacherBirthday_edit" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" id="teacher_teacherBirthday_edit" name="teacher_teacherBirthday" size="16" type="text" value="" placeholder="请选择出生日期" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherArriveDate_edit" class="col-md-3 text-right">入职日期:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date teacher_teacherArriveDate_edit col-md-12" data-link-field="teacher_teacherArriveDate_edit" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" id="teacher_teacherArriveDate_edit" name="teacher_teacherArriveDate" size="16" type="text" value="" placeholder="请选择入职日期" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherPhone_edit" class="col-md-3 text-right">联系电话:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_teacherPhone_edit" name="teacher_teacherPhone" class="form-control" placeholder="请输入联系电话">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherMail_edit" class="col-md-3 text-right">教师邮箱:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_teacherMail_edit" name="teacher_teacherMail" class="form-control" placeholder="请输入教师邮箱">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherDesc_edit" class="col-md-3 text-right">教师简介:</label>
+		  	 <div class="col-md-9">
+			    <script name="teacher_teacherDesc" id="teacher_teacherDesc_edit" type="text/plain"   style="width:100%;height:500px;"></script>
+			 </div>
+		  </div>
+			  <div class="form-group">
+			  	<span class="col-md-3"></span>
+			  	<span onclick="ajaxTeacherModify();" class="btn btn-primary bottom5 top5">修改</span>
+			  </div>
+		</form> 
+	    <style>#teacherEditForm .form-group {margin-bottom:5px;}  </style>
+      </div>
+   </div>
+</div>
+
+
+{include file="common/footer" /}
+<script src="__PUBLIC__/plugins/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap.js"></script>
+<script src="__PUBLIC__/plugins/wow.min.js"></script>
+<script src="__PUBLIC__/plugins/bootstrap-datetimepicker.min.js"></script>
+<script src="__PUBLIC__/plugins/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jsdate.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script>
+var teacher_teacherDesc_editor = UE.getEditor('teacher_teacherDesc_edit'); //教师简介编辑框
+/*弹出修改教师界面并初始化数据*/
+function teacherEdit(teacherNumber) {
+  teacher_teacherDesc_editor.addListener("ready", function () {
+    // editor准备好之后才可以使用 
+    ajaxModifyQuery(teacherNumber);
+  });
+}
+ function ajaxModifyQuery(teacherNumber) {
+	$.ajax({
+		url :  "{:url('Teacher/update')}?teacherNumber=" + teacherNumber,
+		type : "get",
+		dataType: "json",
+		success : function (teacher, response, status) {
+			if (teacher) {
+				$("#teacher_teacherNumber_edit").val(teacher.teacherNumber);
+				$.ajax({
+					url: "{:url('College/listAll')}",
+					type: "get",
+					dataType: "json",
+					success: function(colleges,response,status) { 
+						$("#teacher_collegeObj_collegeNumber_edit").empty();
+						var html="";
+		        		$(colleges).each(function(i,college){
+		        			html += "<option value='" + college.collegeNumber + "'>" + college.collegeName + "</option>";
+		        		});
+		        		$("#teacher_collegeObj_collegeNumber_edit").html(html);
+		        		$("#teacher_collegeObj_collegeNumber_edit").val(teacher.collegeObj);
+					}
+				});
+				$("#teacher_teacherName_edit").val(teacher.teacherName);
+				$("#teacher_teacherPassword_edit").val(teacher.teacherPassword);
+				$("#teacher_teacherSex_edit").val(teacher.teacherSex);
+				$("#teacher_teacherPhoto_edit").val(teacher.teacherPhoto);
+				$("#teacher_teacherPhotoImg").attr("src", "__PUBLIC__/" +　teacher.teacherPhoto);
+				$("#teacher_teacherBirthday_edit").val(teacher.teacherBirthday);
+				$("#teacher_teacherArriveDate_edit").val(teacher.teacherArriveDate);
+				$("#teacher_teacherPhone_edit").val(teacher.teacherPhone);
+				$("#teacher_teacherMail_edit").val(teacher.teacherMail);
+				teacher_teacherDesc_editor.setContent(teacher.teacherDesc, false);
+			} else {
+				alert("获取信息失败！");
+			}
+		}
+	});
+}
+
+/*ajax方式提交教师信息表单给服务器端修改*/
+function ajaxTeacherModify() {
+	$.ajax({
+		url :  "{:url('Teacher/update')}",
+		type : "post",
+		dataType: "json",
+		data: new FormData($("#teacherEditForm")[0]),
+		success : function (obj, response, status) {
+            if(obj.success){
+                alert("信息修改成功！");
+                location.reload(true);
+                $("#teacherQueryForm").submit();
+            }else{
+                alert(obj.message);
+            } 
+		},
+		processData: false,
+		contentType: false,
+	});
+}
+
+$(function(){
+        /*小屏幕导航点击关闭菜单*/
+        $('.navbar-collapse a').click(function(){
+            $('.navbar-collapse').collapse('hide');
+        });
+        new WOW().init();
+    /*出生日期组件*/
+    $('.teacher_teacherBirthday_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd',
+    	minView: 2,
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+    /*入职日期组件*/
+    $('.teacher_teacherArriveDate_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd',
+    	minView: 2,
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+    teacherEdit("{$teacherNumber}");
+ })
+ </script> 
+</body>
+</html>
+

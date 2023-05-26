@@ -1,0 +1,61 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/backcss/college.css" />
+<div id="college_editDiv">
+	<form id="collegeEditForm" enctype="multipart/form-data"  method="post">
+		<div>
+			<span class="label">学院编号:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="college_collegeNumber_edit" name="college_collegeNumber" value="{$collegeNumber}" style="width:200px" />
+			</span>
+		</div>
+
+		<div>
+			<span class="label">学院名称:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="college_collegeName_edit" name="college_collegeName" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">成立日期:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="college_collegeBirthDate_edit" name="college_collegeBirthDate" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">院长姓名:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="college_collegeMan_edit" name="college_collegeMan" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">联系电话:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="college_collegeTelephone_edit" name="college_collegeTelephone" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">附加信息:</span>
+			<span class="inputControl">
+				<textarea id="college_collegeMemo_edit" name="college_collegeMemo" rows="8" cols="60"></textarea>
+
+			</span>
+
+		</div>
+		<div class="operation">
+			<a id="collegeModifyButton" class="easyui-linkbutton">更新</a> 
+		</div>
+	</form>
+</div>
+<script>
+	var publicURL = "__PUBLIC__/";
+	var backURL = "__PUBLIC__/index.php/back/";
+</script>
+<script src="__PUBLIC__/backjs/college/college_modify.js"></script>
+
